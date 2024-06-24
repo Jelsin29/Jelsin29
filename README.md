@@ -25,7 +25,7 @@
 - Develop critical thinking and problem-solving skills
 - Build a strong foundation for a career in advanced computing
 
-📚 Always ready to learn and grow in this rapidly evolving field!
+### 📚 Always ready to learn and grow in this rapidly evolving field!
 
 Let's connect and explore the exciting world of quantum computing and AI together!
 

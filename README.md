@@ -44,6 +44,3 @@ Let's connect and explore the exciting world of quantum computing and AI togethe
 ### 30NitesOfCode:
   [Check out my progress!](https://www.codedex.io/@jelsimsanchez24364/30-nites-of-code)  
   ![@jelsimsanchez24364 #30NitesOfCode](https://www.codedex.io/api/petStatus?user=jelsimsanchez24364)
-
-  
-![Snake animation](https://github.com/Jelsin29/Jelsin29/blob/output/github-contribution-grid-snake.svg)

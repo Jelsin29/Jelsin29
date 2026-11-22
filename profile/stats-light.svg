@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 290" width="640" height="290" role="img" aria-labelledby="title description">
+  <title id="title">Jelsin29's GitHub activity</title>
+  <desc id="description">Public repositories: 54; Stars on public repositories: 4; Followers: 9; Commits in the past year: 389; Pull requests in the past year: 76</desc>
+  <rect x="1" y="1" width="638" height="288" rx="15" fill="#f6f8fa" stroke="#d0d7de"/>
+  <path d="M1 51h638" stroke="#d0d7de"/>
+  <circle cx="28" cy="26" r="4" fill="#57606a"/>
+  <circle cx="43" cy="26" r="4" fill="#0969da"/>
+  <circle cx="58" cy="26" r="4" fill="#1a7f37"/>
+  <g font-family="ui-monospace, SFMono-Regular, Consolas, monospace">
+    <text x="320" y="31" text-anchor="middle" font-size="15" fill="#57606a">Jelsin29 / github</text>
+    <text x="28" y="81" font-size="17" font-weight="bold" fill="#1a7f37">&gt; GitHub activity</text>
+    <g font-size="17">
+      <circle cx="32" cy="110" r="3" fill="#0969da"/><text x="47" y="115" fill="#1f2328">Public repositories</text><text x="608" y="115" fill="#1f2328" text-anchor="end">54</text>
+  <circle cx="32" cy="145" r="3" fill="#0969da"/><text x="47" y="150" fill="#1f2328">Stars on public repositories</text><text x="608" y="150" fill="#1f2328" text-anchor="end">4</text>
+  <circle cx="32" cy="180" r="3" fill="#0969da"/><text x="47" y="185" fill="#1f2328">Followers</text><text x="608" y="185" fill="#1f2328" text-anchor="end">9</text>
+  <circle cx="32" cy="215" r="3" fill="#0969da"/><text x="47" y="220" fill="#1f2328">Commits in the past year</text><text x="608" y="220" fill="#1f2328" text-anchor="end">389</text>
+  <circle cx="32" cy="250" r="3" fill="#0969da"/><text x="47" y="255" fill="#1f2328">Pull requests in the past year</text><text x="608" y="255" fill="#1f2328" text-anchor="end">76</text>
+    </g>
+  </g>
+</svg>

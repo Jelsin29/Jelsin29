@@ -87,17 +87,14 @@ PORTRAIT = """
 )}}@##%%#}@}#{##{@[}#@%%{](%@%)#@{#%}}@}@%@}@@@}#[#@@@@@ @{)+*: @@@         @%]#(}%{}]#[(}{]%#{#{[@%}@{{{###@{@[(
 """.strip("\n").splitlines()
 
-# Dark colors come from the Ghostty Gentleman Kanagawa Blur palette.
 THEMES = {
     "dark": {
-        "bg": "#06080f", "border": "#263356", "text": "#f3f6f9", "muted": "#8a8fa3",
-        "pink": "#ff8dd7", "lavender": "#ffaeea", "blue": "#7fb4ca",
-        "teal": "#7aa89f", "yellow": "#ffe066", "green": "#b7cc85", "red": "#de8fa8",
+        "bg": "#161b22", "border": "#30363d", "text": "#c9d1d9", "muted": "#6e7d8f",
+        "key": "#ffa657", "value": "#a5d6ff", "add": "#3fb950", "remove": "#ff6b60",
     },
     "light": {
-        "bg": "#faf7fc", "border": "#d5ccdf", "text": "#24213a", "muted": "#625771",
-        "pink": "#8d326c", "lavender": "#794b84", "blue": "#285974",
-        "teal": "#30655d", "yellow": "#735800", "green": "#496325", "red": "#9a3f57",
+        "bg": "#f6f8fa", "border": "#d0d7de", "text": "#24292f", "muted": "#718096",
+        "key": "#953800", "value": "#0a3069", "add": "#1a7f37", "remove": "#b42318",
     },
 }
 
@@ -192,87 +189,99 @@ def collect_profile(login):
     }
 
 
-def render_card(login, profile, palette):
-    output = []
+def render_card(login, profile, palette, font):
+    units = font["units_per_em"]
+    glyphs = font["glyphs"]
+    used = set()
+    body = []
     description = []
+    left = 416
+    columns = 84
+    size = 16.5
+    advance = glyphs[" "][0] * size / units
 
-    def svg_text(x, y, value, color, size):
-        text = escape(value).replace(" ", "&#160;")
-        return (f'<text x="{x:.2f}" y="{y}" font-family="Menlo, Consolas, monospace" '
-                f'font-size="{size}" fill="{palette[color]}">{text}</text>')
+    def draw(x, y, text, color, font_size=size):
+        scale = font_size / units
+        elements = []
+        for char in text:
+            char_advance, path = glyphs[char]
+            if path:
+                used.add(char)
+                elements.append(f'<use xlink:href="#g{ord(char)}" transform="translate({x:.3f}) scale({scale:.5f})"/>')
+            x += char_advance * scale
+        if elements:
+            body.append(f'<g fill="{palette[color]}" transform="translate(0 {y})">'
+                        + "".join(elements) + "</g>")
 
-    def line(y, *parts, x=514):
-        for value, color in parts:
-            output.append(svg_text(x, y, value, color, 13.5))
-            x += 8.13 * len(value)
+    def line(y, *segments):
+        x = left
+        for text, color in segments:
+            draw(x, y, text, color)
+            x += len(text) * advance
 
-    def row(y, name, value, *suffix, section="blue"):
-        description.append(f"{name}: {value}{''.join(word for word, _ in suffix)}")
-        line(y, (f"{name}:", section), (" " * (19 - len(name)), "muted"),
-             (value, "text"), *suffix)
+    def heading(y, label):
+        line(y, (label, "text"))
+        start = left + (len(label) + 2) * advance
+        end = left + columns * advance
+        body.append(f'<path d="M{start:.2f} {y - 5}H{end:.2f}" stroke="{palette["text"]}"/>')
 
-    def heading(y, name, color):
-        line(y, (name, color))
-        output.append(f'<path d="M514 {y + 9}h499" stroke="{palette["border"]}"/>')
+    def row(y, label, *values):
+        prefix = f"{label}:"
+        value = "".join(text for text, _ in values)
+        description.append(f"{label}: {value}")
+        leaders = columns - len(prefix) - len(value) - 4
+        if leaders < 1:
+            raise ValueError(f"Row exceeds {columns} columns: {label}")
+        line(y, ("· ", "muted"), (prefix, "key"), (" " + "." * leaders + " ", "muted"), *values)
 
-    line(43, ("jelsin@github", "pink"), ("  ~ $ neofetch", "muted"))
-    heading(78, "JELSIN SANCHEZ", "lavender")
-    row(108, "OS", "macOS, Windows, Android")
-    row(130, "Uptime", "4 years")
-    row(152, "Kernel", "Software Developer")
-    row(174, "Work", "Köstebek Teknoloji")
-    row(196, "Host", "İstanbul Medeniyet University")
-    row(218, "IDE", "Neovim, Zed")
-    row(240, "Programming", "TypeScript, JavaScript, Python, C/C++,")
-    line(258, (" " * 20, "muted"), ("Dart, Rust, Go", "text"))
-    description.append("Also programming in Dart, Rust and Go")
-    row(282, "Frameworks", "React, Next.js, Flutter, Electron")
-    row(304, "Languages", "Spanish, English, Turkish")
-    row(326, "Hobbies.Software", "REA, Web Development, Optimization")
-    row(348, "Hobbies.Hardware", "Circuits, computers, Ben Eater’s 6502")
-    row(370, "Projects", "Vigilanty, WebAR-Sandbox, 6502-CPU")
+    heading(39, f"jelsin@{login.lower()}")
+    row(64, "OS", ("Windows, macOS, Android, Linux", "value"))
+    row(86, "Uptime", ("4 Years", "value"))
+    row(108, "Host", ("KÖSTEBEK TEKNOLOJİ YAZILIM BİL. EĞT. DAN. ARGE TİC. LTD. ŞTİ.", "value"))
+    row(130, "Kernel", ("Software Developer", "value"))
+    row(152, "IDE", ("Neovim, Zed", "value"))
 
-    heading(408, "CONTACT", "pink")
-    row(435, "Email.Work", "jelsin@kostebekteknoloji.com", section="lavender")
-    row(457, "LinkedIn", "linkedin.com/in/jelsin-sanchez", section="lavender")
+    row(188, "Languages.Programming", ("TypeScript, JavaScript, Python, C/C++, Dart, Rust, Go", "value"))
+    row(210, "Frameworks", ("React, Next.js, Flutter, Electron", "value"))
+    row(232, "Languages.Real", ("Spanish, English, Turkish", "value"))
+    row(268, "Hobbies.Software", ("REA, Web Development, Optimization", "value"))
+    row(290, "Hobbies.Hardware", ("Circuits, Robotics, Embedded Systems", "value"))
+    row(312, "Projects", ("Vigilanty, WebAR-Sandbox, 6502-CPU", "value"))
 
-    row(479, "Portfolio", "jelsin-portfolio.vercel.app", section="lavender")
+    heading(351, "- Contact")
+    row(376, "Email.Personal", ("jelsimsanchez@gmail.com", "value"))
+    row(398, "Email.Work", ("jelsin@kostebekteknoloji.com", "value"))
+    row(420, "LinkedIn", ("jelsin-sanchez", "value"))
+    row(442, "Portfolio", ("jelsin-portfolio.vercel.app", "value"))
 
-    heading(512, "GITHUB", "yellow")
-    row(539, "Repositories", f"{OWNED_REPOSITORIES} total",
-        (f' / {profile["repos"]:,} public / {profile["contributed"]:,} contributed to', "muted"),
-        section="green")
-    row(561, "Contributions", f'{profile["contributions"]:,}',
-        (" / last 12 months", "muted"), section="green")
-    row(583, "Public commits", f'{profile["commits"]:,}',
-        (f' / {profile["stars"]:,} stars / {profile["followers"]:,} followers', "muted"),
-        section="green")
+    heading(481, "- GitHub Stats")
+    row(506, "Repos", (str(OWNED_REPOSITORIES), "value"),
+        ("  {Public: ", "text"), (f'{profile["repos"]:,}', "value"),
+        (", Contributed: ", "text"), (f'{profile["contributed"]:,}', "value"),
+        ("}  |  ", "text"), ("Stars: ", "key"), (f'{profile["stars"]:,}', "value"))
+    row(528, "Contributions", (f'{profile["contributions"]:,}', "value"), ("  (Last 12 Months)", "text"))
+    row(550, "Public Commits", (f'{profile["commits"]:,}', "value"), ("  |  ", "text"),
+        ("Followers: ", "key"), (f'{profile["followers"]:,}', "value"))
     net = profile["additions"] - profile["deletions"]
-    row(605, "Public LOC", f'{net:,}',
-        (f'  +{profile["additions"]:,}', "green"), (f'  -{profile["deletions"]:,}', "red"),
-        section="green")
+    row(572, "Public Lines of Code", (f'{net:,}', "value"), ("  (", "text"),
+        (f'{profile["additions"]:,}++', "add"), (",  ", "text"),
+        (f'{profile["deletions"]:,}--', "remove"), (")", "text"))
 
     description.append(f"Total owned repositories verified on {OWNED_REPOSITORIES_AS_OF}.")
-    description.append("Contributions are from the GitHub profile calendar. Public commits and lines are counted on default branches of tracked public repositories. Merge commits are excluded from line counts.")
-    portrait = "\n    ".join(
-        svg_text(21, 76 + index * 7.85, chars, "blue", 6.75)
-        for index, chars in enumerate(PORTRAIT)
-        if chars.strip()
-    )
-    swatches = "\n    ".join(
-        f'<rect x="{22 + 27 * index}" y="613" width="22" height="8" rx="1" fill="{palette[color]}"/>'
-        for index, color in enumerate(("red", "green", "yellow", "blue", "pink", "teal", "text"))
-    )
-    return f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 640" width="1040" height="640" role="img" aria-labelledby="title description">
-  <title id="title">Jelsin Sanchez ({escape(login)}) · Neofetch-style profile</title>
+    description.append("Public commits and lines are counted on default branches of tracked public repositories. Merge commits are excluded from line counts.")
+    for index, chars in enumerate(PORTRAIT):
+        draw(18, 32 + index * 8.85, chars, "text", 6.75)
+
+    paths = "\n".join(f'<path id="g{ord(char)}" d="{glyphs[char][1]}"/>' for char in sorted(used))
+    content = "\n  ".join(body)
+    return f"""<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1130 601" width="1130" height="601" role="img" aria-labelledby="title description">
+  <title id="title">Jelsin Sanchez ({escape(login)}) · Terminal Profile in Iosevka</title>
   <desc id="description">{escape(". ".join(description))}</desc>
-  <rect x="1" y="1" width="1038" height="638" rx="10" fill="{palette["bg"]}" stroke="{palette["border"]}"/>
-  <path d="M493 32v585" stroke="{palette["border"]}"/>
-  <g aria-hidden="true">
-    {portrait}
-    {swatches}
-  </g>
-  {"".join(output)}
+  <rect x="1" y="1" width="1128" height="599" rx="14" fill="{palette["bg"]}" stroke="{palette["border"]}"/>
+  <defs>
+    {paths}
+  </defs>
+  {content}
 </svg>
 """
 
@@ -280,11 +289,12 @@ def render_card(login, profile, palette):
 def main():
     login = os.environ["PROFILE_LOGIN"]
     profile = collect_profile(login)
+    font = json.loads(Path(__file__).with_name("iosevka-outlines.json").read_text(encoding="utf-8"))
     output = Path("profile")
     output.mkdir(exist_ok=True)
     for theme, palette in THEMES.items():
         (output / f"stats-{theme}.svg").write_text(
-            render_card(login, profile, palette), encoding="utf-8"
+            render_card(login, profile, palette, font), encoding="utf-8"
         )
 
 

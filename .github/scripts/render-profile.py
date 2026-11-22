@@ -185,6 +185,7 @@ def collect_profile(login):
     return {
         "contributions": account["contributionsCollection"]["contributionCalendar"]["totalContributions"],
         "repos": len(repositories),
+        "contributed": len(contributed),
         "stars": sum(repo["stargazers_count"] for repo in repositories),
         "followers": account["followers"]["totalCount"],
         "commits": commits,
@@ -237,16 +238,19 @@ def render_card(login, profile, palette):
     row(435, "Email.Work", "jelsin@kostebekteknoloji.com", section="lavender")
     row(457, "LinkedIn", "linkedin.com/in/jelsin-sanchez", section="lavender")
 
-    heading(495, "GITHUB", "yellow")
-    row(522, "Repositories", f"{OWNED_REPOSITORIES} total",
-        (f' / {profile["repos"]:,} public', "muted"), section="green")
-    row(544, "Contributions", f'{profile["contributions"]:,}',
+    row(479, "Portfolio", "jelsin-portfolio.vercel.app", section="lavender")
+
+    heading(512, "GITHUB", "yellow")
+    row(539, "Repositories", f"{OWNED_REPOSITORIES} total",
+        (f' / {profile["repos"]:,} public / {profile["contributed"]:,} contributed to', "muted"),
+        section="green")
+    row(561, "Contributions", f'{profile["contributions"]:,}',
         (" / last 12 months", "muted"), section="green")
-    row(566, "Public commits", f'{profile["commits"]:,}',
+    row(583, "Public commits", f'{profile["commits"]:,}',
         (f' / {profile["stars"]:,} stars / {profile["followers"]:,} followers', "muted"),
         section="green")
     net = profile["additions"] - profile["deletions"]
-    row(588, "Public LOC", f'{net:,}',
+    row(605, "Public LOC", f'{net:,}',
         (f'  +{profile["additions"]:,}', "green"), (f'  -{profile["deletions"]:,}', "red"),
         section="green")
 
@@ -258,14 +262,14 @@ def render_card(login, profile, palette):
         if chars.strip()
     )
     swatches = "\n    ".join(
-        f'<rect x="{22 + 27 * index}" y="596" width="22" height="8" rx="1" fill="{palette[color]}"/>'
+        f'<rect x="{22 + 27 * index}" y="613" width="22" height="8" rx="1" fill="{palette[color]}"/>'
         for index, color in enumerate(("red", "green", "yellow", "blue", "pink", "teal", "text"))
     )
-    return f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 623" width="1040" height="623" role="img" aria-labelledby="title description">
+    return f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 640" width="1040" height="640" role="img" aria-labelledby="title description">
   <title id="title">Jelsin Sanchez ({escape(login)}) · Neofetch-style profile</title>
   <desc id="description">{escape(". ".join(description))}</desc>
-  <rect x="1" y="1" width="1038" height="621" rx="10" fill="{palette["bg"]}" stroke="{palette["border"]}"/>
-  <path d="M493 32v568" stroke="{palette["border"]}"/>
+  <rect x="1" y="1" width="1038" height="638" rx="10" fill="{palette["bg"]}" stroke="{palette["border"]}"/>
+  <path d="M493 32v585" stroke="{palette["border"]}"/>
   <g aria-hidden="true">
     {portrait}
     {swatches}

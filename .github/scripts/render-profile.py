@@ -152,12 +152,19 @@ def render_card(login, profile, palette, today):
     description = []
 
     def span(value, color):
-        return f'<tspan fill="{color}">{escape(value)}</tspan>'
+        return ((value, color),)
 
-    def line(y, markup, x=382):
-        output.append(f'<text x="{x}" y="{y}">{markup}</text>')
+    def svg_text(x, y, value, color, size):
+        text = escape(value).replace(" ", "&#160;")
+        return (f'<text x="{x:.2f}" y="{y}" font-family="Menlo, Consolas, monospace" '
+                f'font-size="{size}" fill="{color}">{text}</text>')
 
-    def row(y, name, value, extra="", plain_extra=""):
+    def line(y, parts, x=382):
+        for value, color in parts:
+            output.append(svg_text(x, y, value, color, 12.5))
+            x += 7.53 * len(value)
+
+    def row(y, name, value, extra=(), plain_extra=""):
         dots = "." * (26 - len(name))
         description.append(f"{name}: {value}{plain_extra}")
         line(y, span(name, accent) + span(f" {dots} ", muted) + span(value, foreground) + extra)
@@ -206,7 +213,7 @@ def render_card(login, profile, palette, today):
     description.append("Commits and lines are measured on default branches of public repositories tracked by GitHub. Merge commits are excluded from line counts.")
 
     portrait = "\n".join(
-        f'<text x="24" y="{76 + index * 15}">{escape(chars)}</text>'
+        svg_text(24, 76 + index * 15, chars, portrait_color, 11.5)
         for index, chars in enumerate(PORTRAIT)
     )
     return f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 950 545" width="950" height="545" role="img" aria-labelledby="title description">
@@ -214,14 +221,10 @@ def render_card(login, profile, palette, today):
   <desc id="description">{escape("; ".join(description))}</desc>
   <rect x="1" y="1" width="948" height="543" rx="12" fill="{background}" stroke="{border}"/>
   <path d="M1 52h948M354 70v445" stroke="{border}"/>
-  <g xml:space="preserve" font-family="ui-monospace, Menlo, Consolas, monospace">
-    <g font-size="11.5" fill="{portrait_color}" aria-hidden="true">
-      {portrait}
-    </g>
-    <g font-size="12.5">
-      {"".join(output)}
-    </g>
+  <g aria-hidden="true">
+    {portrait}
   </g>
+  {"".join(output)}
 </svg>
 """
 

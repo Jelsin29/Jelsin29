@@ -3,7 +3,6 @@
 import json
 import os
 import subprocess
-from datetime import date, datetime, timezone
 from pathlib import Path
 from xml.sax.saxutils import escape
 
@@ -12,7 +11,7 @@ ACCOUNT_QUERY = """
 query($login: String!, $endCursor: String) {
   user(login: $login) {
     id
-    createdAt
+    contributionsCollection { contributionCalendar { totalContributions } }
     followers { totalCount }
     repositoriesContributedTo(first: 100, after: $endCursor, privacy: PUBLIC,
                               includeUserRepositories: false) {
@@ -24,41 +23,90 @@ query($login: String!, $endCursor: String) {
 """
 
 PORTRAIT = """
-                  .;rrsi;;;;;.
-               ,;2HS####ShHSGhX:,.
-            .;i3#999999BB99B999#hs.   .
-          .;X3G99BBB&&B999BBB&BB#9SX;2X;,
-       .,:r5SB9999BB9#SSS###BBBB9999SH353.
-     .sA3AhSBB99BB9Gh5AXXAA23SB&999999S#3si
-     iGS##9#999B99GhAXXsXssXX3SB#9B99999#G3;
-     ;GSBBB9999B9S3AsssssssssA3S9BBBBB9999#H:
-      2S9BB99B9#H32AAXXXXXXXAAA3#BBB9B9999Shr
-      AS9BB99B#HMh2AsssssrrssA5hh#9999B99G5s,
-     sS9BBBB9#S#SHMMHM2srs3HHh33HHGBBBB99h;.
-     ,SBBBBBBSGM3hhHh53AsA52HG55A32MBBBBBh.
-      AS&&&&BMh53h2h253AsX525225AXA39&BBBh
-       AB93G9h32AXsXA35AsXAAsrsssXA59#hG9,
-        :G339h5AXssX235AsX2AXsrrrsA3#22sr
-         .M5Sh5AXXsX222srsAAAsrrssA3h2h,
-          rh5h52AAAXA22AXA2AXssssXA522S.
-       ..,A9SH52A2AAAAAAAXXXXXXXXX2#S#M.
-       GHG#B&&h52AX5352AAAA22AXXAAHBSi.,
-       .;;rSB&#h52AAAXssXssXXXXA23BBS3MG;
-          :MB&#hh322AXXXXssXAAA53M&B##M,
-          .SB&S33hh32AXsssXA2332AH&9h,
-       iXhS99BG322253552222552AXAMB9#3i:.
-   :AM#99H9999#3AXXXAAAssXXXXssX2M9###Sh##5r.
-2M#999999S9##99h2XssXXAXsXssssXA5G#####rS####
-999999999G9####S5AXsssXsssssssXAM######Xh####
-999999#999999###GAXsrssssssssXX3S######3X####
-9999999999B99####G2XrrrrrrrssXh########S:####
-999999999999999999#G2rrrrrsAhS##9######Sr####
+
+
+                                                .,-~~++=+-:,:----:---,
+                                            .,-*>)([[[[[[[[(>^=^^<](>^=-,.
+                                        .,,-+)[{%%%###%%####%[]}%{{%{}])^+-,...
+                                     .,:-+>[%%#####@@@@@@@@@@###@@@#####%}(>*+-,.
+                                   ,~+~=<[###@@@@@@@@####@@@@@@@@@@@@@@@@@#%%}<~:,.     .
+                                 ,-=^^>]{##@@@@@@@@@@@@@@#@@#@@@@@@@@@@@@@@@###%]^-:,,:*<*=:.
+                              .:~*^>(}%##@@#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@#####}>^*>)^)*+=-,
+                           .::-+^^({#@@@@@@@@@#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@#######%])]])*<>>*.
+                      .,:-~~:~+*>[%@@@@@@@@@@@@@@@@%{}[[[[[[[[}}}{{%#@@@@@@@##@##@@@@@%{[[](}]*.
+                    .:+=+<)=+*>)}#@@@@@@@@@@@@@@#{%]()>><<^^^^<<<>>([}#@@@@@@##@@@@@@@@#}}{%{(+:--,
+                    ,*((]{[]][{####@@@@@@@@@@@##{}[()><^^*****^^^^<<>(}%@@@@@##@@@@@@@@@@@@@#(((]<+.
+                   .~<{%%%{####@@##@@@@@@@@@@##%}](><^^^********^^^^^<(}%@@@###@@@@@@@@@@@@@#%{{>^=,
+                    +)}{%##@@@@@@##@@@@@@@@@@#%}])<^*****************^<([%##%##@@@@@@@@@@@@@#%%####[*
+                    -)%{%#@@@@@@###@@@@@@@@@##}]><^******************^^<)[%%#@@@@@@@@@@@@@#######%%{]+
+                    .*{}{%@@@@@@@@##@@##@@###})><^^^^^^^^^****^^^^^^^^^<<)}%#@@@@@@@@@@@@@@@@@#####%}),
+                     .=%%@@@@@@@@@@@@@@###%[])>><<<<<^^^^^^^^^^^^^^<<<<<<<)[%@@@@@@@@@@@@@@@@@##%{{])*-
+                      :]#@@@@@@@@@@@@@@#%}((()>><^^^******************^^<>>)]%@@@#@@@@@#@@@@@@%#})<^==,
+                     -)<{#@@@@@@@@@@@@@#{[][[])><^^**================*^<>)]](]{#@@@#@@@@@@@@@@%{])<*=,
+                   .~)%}%@@@@@@@@@@###%%{}{#%%{{{{{}}]>^*===++=*>([}}{{{{}{{{}][#@@@@@@@@@@@@##[)^=-.
+                    *{{#@@@@@@@@@@@@@%%{%@%}[]((((][}[])<^====^)][}[](><<>>)]}%]]{@@@@@@@@@@@##[^:
+                    ,)@@@@@@@@@@@@@@@%%{#}])>>>))(((())()<^==*<>>))((]()><^^<)]]))[#@@@@@@@@@@@(:..
+                    .<{#@@@@@@@@@@@@%{}{}]))]}{]}%#%>>((()^**^<)>)<^%%%(>}[(<<>>>>)]@@@@@@@@@@@%^.
+                     +]%@@@@@@@@@@@@}[]]())([}]))[[(^>(](>^***<)))>^)]]>>(](><^^<<>(#@@@@@@@@@@}+
+                      .*>#@@@@#@@@@@[(())))))>><<<<<>)(()>^***^<>><^^^^^^^^^^^^^^<>(##@@@@@@@@#(,
+                       ,<#@@@}(((#@@[]()))><<^^****^<)()>>^***^^<<<**=====*****^^<>)#@@#[]}{@@{:
+                        ,^]%@%)>({@@[(()><^^^*****^<>))))><^*^^<<<<^**========**^<>(##{])>(>@#^
+                          .*%@]>>]@@[](>><^^*****^^<>)((><^***^<>><^^*========*^^<>]#%)^<>)-:^,
+                            ,[%(>>%#}])>><^^*****^^<>))><^*===*^<>><^*========**^<>[#])><>[+.
+                             :({()[#}])>><<^^****^<>>><<<*++++=*^^^><*=======***^<>([))><}>
+                              :]]))([])>><<^^^^^^^<>>>>))><^^^<>)>><^**********^^<>))>>>)#+
+                              ,>}(()(()>><<<<^<<^^^<<<>>>^***^^<<<^^^**********^^>>><><>{@^
+                             .:=%{()]]()>><<<<><^^<<<<^^^^^^<^^******^^^*^^**^^^<>]}](]}@#<.
+                       .,:,,:+<{@@@@@}()>><<<>><^<>><<<<<<<^^^^^^^^^^^^^^^^^^^^<<)@@@@@#}>-
+                       *[[>)]{#@@@@@@@]))>>><><^<(]]]](()>>>>>>>))((((<^^^^^^^^<>{@@@@}<-.
+                       :{@@@##%{@@@@@@{())>><<^^^<>>>><<^^^^^^^^^^^^^^****^^<^<>[@@@#):...~~,.
+                         -==+~~>{@@@@@@{]()>><<^^^<<<^*********==**^***^^^^<<<)]@@@@@[)<<)]}<~.
+                             .~*({@@@@@%[]())><<<<<<<^^***********^^^^^^^^<<>((}@@@@@@####@#<,
+                              -=>%@@@@@%]][]()>><><<<^^*^^^^^^****^^^<^^<<>(())%@@@@@@###%<.
+                               ,^#@@@@@{]((]]]()>>><^^^**=======**^^<<<>)(])>>)#@@@@{(((^,
+                               .}#@@@@@}]())(]][]))>><<^*=******^^<<>)(]((><<<)@@@@##<,.
+                             :~[###@@@#}]))))))(]]]())><^^^^^^^<<>>)(())><<<<<(%@@@##%*
+                        :+^[##%#####@@#}])>><<<>>)))((((())))))))))>>><<^^^^<>]}@@#####[+~,
+                   .-=)}#@@@@)#######@@}])><<^^^^<>><<<<<^^^^^^^^^<<<^^***^^<)][@@###%%%%[]%}[[]*.
+                :*}######@@@@>########@%[)><^^***^^<<<<<^******^^^^^******^<>)]}####%#%%%%>)%%#%%%]<~.
+           :=>[%#########@@@@(#########@}(><^*****^^^^<<<^****^*****===**^^<>(]{%###%#%%%%]-}%#####%%%]*-.
+     :+^)}%##############@@@#}###########])><^*******^^^^^^^*******====**^<<)({%###%#%##%%{:<%%%########%%}])^~,
+*>]}%#####################@@]############%)><^^*******************====**^^<>)}%#%%%#%%%%#%%~-%%###############%%
+###########################@}{############{)<^^^**==*************===***^^^<>[{##%#%###%#%%%^:]%%################
+@@@######@@@###############@@%@############{>^^^^**===*=***************^^<>]{%#%#%###%%%%%%]:*%%################
+@@@@##@##@@@################@@@@@###########{>^^^**================****^^<[%#%%#%#%%%%%%%%%%--{%################
+@@@@@@##@###@################@@@@############}(<^*=================***^^>[####%#%#%%%#####%%=:)%################
+#######@@#####################@@@@############%}]<*================*^<)[%######%%%%##%%%##%%<:^#################
+####@#@########################@@@@@@@@@@@@@@##%%%]<*============*^>(}%%##%%###%%%%%######%%^-^#################
+@###################################@@@@@@@@@@#%)(}%})<***====**^>]{#######%#@################%#################
+@##########################################@@@###%}][]][(<^*^^^<({%%%%%%%%%#@@##################################
+##################################################@@@@#[](](>>){%]))(((((([@####################################
+###################################################@@#####}]}}{)]%#@############################################
+@####@##################################################@@@@}(]%################################################
+@@#@#@###################################################@@[)%##################################################
+#@#@#@#########@########################################@@)[####################################################
+@@@##@@#################################################@][#####################################################
+@#@##@#################################################@#)%#####################################################
 """.strip("\n").splitlines()
 
+# Dark colors come from the Ghostty Gentleman Kanagawa Blur palette.
 THEMES = {
-    "dark": ("#101811", "#354a39", "#d8eedc", "#8da996", "#99efa6", "#94c9a0", "#ff9292"),
-    "light": ("#f6f8f0", "#bccabd", "#223b2b", "#526957", "#16592b", "#326346", "#a22828"),
+    "dark": {
+        "bg": "#06080f", "border": "#263356", "text": "#f3f6f9", "muted": "#8a8fa3",
+        "pink": "#ff8dd7", "lavender": "#ffaeea", "blue": "#7fb4ca",
+        "teal": "#7aa89f", "yellow": "#ffe066", "green": "#b7cc85", "red": "#de8fa8",
+    },
+    "light": {
+        "bg": "#faf7fc", "border": "#d5ccdf", "text": "#24213a", "muted": "#625771",
+        "pink": "#8d326c", "lavender": "#794b84", "blue": "#285974",
+        "teal": "#30655d", "yellow": "#735800", "green": "#496325", "red": "#9a3f57",
+    },
 }
+
+# The authenticated owner inventory includes private repositories. A public
+# workflow can refresh the public count, but the full total is a dated snapshot.
+OWNED_REPOSITORIES = 91
+OWNED_REPOSITORIES_AS_OF = "2026-11-22"
 
 
 def github_api(*args):
@@ -135,9 +183,8 @@ def collect_profile(login):
     tracked = {repo["full_name"] for repo in repositories} | contributed
     commits, additions, deletions = collect_commits(tracked, account["id"])
     return {
-        "created": date.fromisoformat(account["createdAt"][:10]),
+        "contributions": account["contributionsCollection"]["contributionCalendar"]["totalContributions"],
         "repos": len(repositories),
-        "contributed": len(contributed),
         "stars": sum(repo["stargazers_count"] for repo in repositories),
         "followers": account["followers"]["totalCount"],
         "commits": commits,
@@ -146,83 +193,82 @@ def collect_profile(login):
     }
 
 
-def render_card(login, profile, palette, today):
-    background, border, foreground, muted, accent, portrait_color, red = palette
+def render_card(login, profile, palette):
     output = []
     description = []
-
-    def span(value, color):
-        return ((value, color),)
 
     def svg_text(x, y, value, color, size):
         text = escape(value).replace(" ", "&#160;")
         return (f'<text x="{x:.2f}" y="{y}" font-family="Menlo, Consolas, monospace" '
-                f'font-size="{size}" fill="{color}">{text}</text>')
+                f'font-size="{size}" fill="{palette[color]}">{text}</text>')
 
-    def line(y, parts, x=382):
+    def line(y, *parts, x=514):
         for value, color in parts:
-            output.append(svg_text(x, y, value, color, 12.5))
-            x += 7.53 * len(value)
+            output.append(svg_text(x, y, value, color, 13.5))
+            x += 8.13 * len(value)
 
-    def row(y, name, value, extra=(), plain_extra=""):
-        dots = "." * (26 - len(name))
-        description.append(f"{name}: {value}{plain_extra}")
-        line(y, span(name, accent) + span(f" {dots} ", muted) + span(value, foreground) + extra)
+    def row(y, name, value, *suffix, section="blue"):
+        description.append(f"{name}: {value}{''.join(word for word, _ in suffix)}")
+        line(y, (f"{name}:", section), (" " * (19 - len(name)), "muted"),
+             (value, "text"), *suffix)
 
-    def heading(y, title):
-        line(y, span(title, accent))
-        output.append(f'<path d="M382 {y + 10}h535" stroke="{border}"/>')
+    def heading(y, name, color):
+        line(y, (name, color))
+        output.append(f'<path d="M514 {y + 9}h499" stroke="{palette["border"]}"/>')
 
-    account_age = (today - profile["created"]).days
-    years = today.year - profile["created"].year
-    if (today.month, today.day) < (profile["created"].month, profile["created"].day):
-        years -= 1
-    uptime = f"{years} {'year' if years == 1 else 'years'} on GitHub"
-    if not years:
-        uptime = f"{account_age} {'day' if account_age == 1 else 'days'} on GitHub"
+    line(43, ("jelsin@github", "pink"), ("  ~ $ neofetch", "muted"))
+    heading(78, "JELSIN SANCHEZ", "lavender")
+    row(108, "OS", "macOS, Windows, Android")
+    row(130, "Uptime", "4 years")
+    row(152, "Kernel", "Software Developer")
+    row(174, "Work", "Köstebek Teknoloji")
+    row(196, "Host", "İstanbul Medeniyet University")
+    row(218, "IDE", "Neovim, Zed")
+    row(240, "Programming", "TypeScript, JavaScript, Python, C/C++,")
+    line(258, (" " * 20, "muted"), ("Dart, Rust, Go", "text"))
+    description.append("Also programming in Dart, Rust and Go")
+    row(282, "Frameworks", "React, Next.js, Flutter, Electron")
+    row(304, "Languages", "Spanish, English, Turkish")
+    row(326, "Hobbies.Software", "REA, Web Development, Optimization")
+    row(348, "Hobbies.Hardware", "Circuits, computers, Ben Eater’s 6502")
+    row(370, "Projects", "Vigilanty, WebAR-Sandbox, 6502-CPU")
 
-    line(37, span(f"jelsin@{login.lower()}:~$", accent) + span(" whoami", foreground), 24)
-    heading(89, "SYSTEM / JELSIN SANCHEZ")
-    row(119, "OS", "macOS, Windows, Android")
-    row(141, "Uptime", uptime)
-    row(163, "Host", "İstanbul Medeniyet University")
-    row(185, "Kernel", "Computer Engineering Student")
-    row(207, "IDE", "Neovim")
-    row(229, "Languages.Programming", "TypeScript, JavaScript, Python, Java, C/C++")
-    row(251, "Languages.Computer", "HTML, CSS, JSON, YAML")
-    row(273, "Languages.Real", "Spanish, English, Turkish")
-    row(295, "Hobbies.Software", "Web development, AI, quantum computing")
+    heading(408, "CONTACT", "pink")
+    row(435, "Email.Work", "jelsin@kostebekteknoloji.com", section="lavender")
+    row(457, "LinkedIn", "linkedin.com/in/jelsin-sanchez", section="lavender")
 
-    heading(331, "CONTACT")
-    row(361, "LinkedIn", "linkedin.com/in/jelsin-sanchez")
-    row(383, "Discord", "discord.gg/latinoperodecente")
-    row(405, "Portfolio", "jelsin-portfolio.vercel.app")
-
-    heading(441, "GITHUB / PUBLIC ACTIVITY")
-    row(471, "Repos", f'{profile["repos"]:,}',
-        span('  /  ', muted) + span('Contributed', accent) + span(f' {profile["contributed"]:,}', foreground)
-        + span('  /  ', muted) + span('Stars', accent) + span(f' {profile["stars"]:,}', foreground),
-        f', contributed to {profile["contributed"]:,}, {profile["stars"]:,} stars')
-    row(493, "Commits", f'{profile["commits"]:,}',
-        span('  /  ', muted) + span('Followers', accent) + span(f' {profile["followers"]:,}', foreground),
-        f', {profile["followers"]:,} followers')
+    heading(495, "GITHUB", "yellow")
+    row(522, "Repositories", f"{OWNED_REPOSITORIES} total",
+        (f' / {profile["repos"]:,} public', "muted"), section="green")
+    row(544, "Contributions", f'{profile["contributions"]:,}',
+        (" / last 12 months", "muted"), section="green")
+    row(566, "Public commits", f'{profile["commits"]:,}',
+        (f' / {profile["stars"]:,} stars / {profile["followers"]:,} followers', "muted"),
+        section="green")
     net = profile["additions"] - profile["deletions"]
-    row(515, "Lines of Code", f'{net:,}',
-        span(f'  +{profile["additions"]:,}', accent) + span(f'  -{profile["deletions"]:,}', red),
-        f', {profile["additions"]:,} added and {profile["deletions"]:,} deleted')
-    description.append("Commits and lines are measured on default branches of public repositories tracked by GitHub. Merge commits are excluded from line counts.")
+    row(588, "Public LOC", f'{net:,}',
+        (f'  +{profile["additions"]:,}', "green"), (f'  -{profile["deletions"]:,}', "red"),
+        section="green")
 
-    portrait = "\n".join(
-        svg_text(24, 76 + index * 15, chars, portrait_color, 11.5)
+    description.append(f"Total owned repositories verified on {OWNED_REPOSITORIES_AS_OF}.")
+    description.append("Contributions are from the GitHub profile calendar. Public commits and lines are counted on default branches of tracked public repositories. Merge commits are excluded from line counts.")
+    portrait = "\n    ".join(
+        svg_text(21, 76 + index * 7.85, chars, "blue", 6.9)
         for index, chars in enumerate(PORTRAIT)
+        if chars.strip()
     )
-    return f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 950 545" width="950" height="545" role="img" aria-labelledby="title description">
-  <title id="title">Jelsin Sanchez's terminal profile and ASCII portrait</title>
-  <desc id="description">{escape("; ".join(description))}</desc>
-  <rect x="1" y="1" width="948" height="543" rx="12" fill="{background}" stroke="{border}"/>
-  <path d="M1 52h948M354 70v445" stroke="{border}"/>
+    swatches = "\n    ".join(
+        f'<rect x="{22 + 27 * index}" y="596" width="22" height="8" rx="1" fill="{palette[color]}"/>'
+        for index, color in enumerate(("red", "green", "yellow", "blue", "pink", "teal", "text"))
+    )
+    return f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 623" width="1040" height="623" role="img" aria-labelledby="title description">
+  <title id="title">Jelsin Sanchez ({escape(login)}) · Neofetch-style profile</title>
+  <desc id="description">{escape(". ".join(description))}</desc>
+  <rect x="1" y="1" width="1038" height="621" rx="10" fill="{palette["bg"]}" stroke="{palette["border"]}"/>
+  <path d="M493 32v568" stroke="{palette["border"]}"/>
   <g aria-hidden="true">
     {portrait}
+    {swatches}
   </g>
   {"".join(output)}
 </svg>
@@ -232,12 +278,11 @@ def render_card(login, profile, palette, today):
 def main():
     login = os.environ["PROFILE_LOGIN"]
     profile = collect_profile(login)
-    today = datetime.now(timezone.utc).date()
     output = Path("profile")
     output.mkdir(exist_ok=True)
     for theme, palette in THEMES.items():
         (output / f"stats-{theme}.svg").write_text(
-            render_card(login, profile, palette, today), encoding="utf-8"
+            render_card(login, profile, palette), encoding="utf-8"
         )
 
 

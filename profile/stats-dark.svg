@@ -1,20 +1,42 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 290" width="640" height="290" role="img" aria-labelledby="title description">
-  <title id="title">Jelsin29's GitHub activity</title>
-  <desc id="description">Public repositories: 54; Stars on public repositories: 4; Followers: 9; Commits in the past year: 389; Pull requests in the past year: 76</desc>
-  <rect x="1" y="1" width="638" height="288" rx="15" fill="#0d1117" stroke="#30363d"/>
-  <path d="M1 51h638" stroke="#30363d"/>
-  <circle cx="28" cy="26" r="4" fill="#8b949e"/>
-  <circle cx="43" cy="26" r="4" fill="#79c0ff"/>
-  <circle cx="58" cy="26" r="4" fill="#56d364"/>
-  <g font-family="ui-monospace, SFMono-Regular, Consolas, monospace">
-    <text x="320" y="31" text-anchor="middle" font-size="15" fill="#8b949e">Jelsin29 / github</text>
-    <text x="28" y="81" font-size="17" font-weight="bold" fill="#56d364">&gt; GitHub activity</text>
-    <g font-size="17">
-      <circle cx="32" cy="110" r="3" fill="#79c0ff"/><text x="47" y="115" fill="#e6edf3">Public repositories</text><text x="608" y="115" fill="#e6edf3" text-anchor="end">54</text>
-  <circle cx="32" cy="145" r="3" fill="#79c0ff"/><text x="47" y="150" fill="#e6edf3">Stars on public repositories</text><text x="608" y="150" fill="#e6edf3" text-anchor="end">4</text>
-  <circle cx="32" cy="180" r="3" fill="#79c0ff"/><text x="47" y="185" fill="#e6edf3">Followers</text><text x="608" y="185" fill="#e6edf3" text-anchor="end">9</text>
-  <circle cx="32" cy="215" r="3" fill="#79c0ff"/><text x="47" y="220" fill="#e6edf3">Commits in the past year</text><text x="608" y="220" fill="#e6edf3" text-anchor="end">389</text>
-  <circle cx="32" cy="250" r="3" fill="#79c0ff"/><text x="47" y="255" fill="#e6edf3">Pull requests in the past year</text><text x="608" y="255" fill="#e6edf3" text-anchor="end">76</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 950 545" width="950" height="545" role="img" aria-labelledby="title description">
+  <title id="title">Jelsin Sanchez's terminal profile and ASCII portrait</title>
+  <desc id="description">OS: macOS, Windows, Android; Uptime: 2 years on GitHub; Host: İstanbul Medeniyet University; Kernel: Computer Engineering Student; IDE: Neovim; Languages.Programming: TypeScript, JavaScript, Python, Java, C/C++; Languages.Computer: HTML, CSS, JSON, YAML; Languages.Real: Spanish, English, Turkish; Hobbies.Software: Web development, AI, quantum computing; LinkedIn: linkedin.com/in/jelsin-sanchez; Discord: discord.gg/latinoperodecente; Portfolio: jelsin-portfolio.vercel.app; Repos: 54, contributed to 1, 4 stars; Commits: 489, 9 followers; Lines of Code: 489,964, 2,979,648 added and 2,489,684 deleted; Commits and lines are measured on default branches of public repositories tracked by GitHub. Merge commits are excluded from line counts.</desc>
+  <rect x="1" y="1" width="948" height="543" rx="12" fill="#101811" stroke="#354a39"/>
+  <path d="M1 52h948M354 70v445" stroke="#354a39"/>
+  <g xml:space="preserve" font-family="ui-monospace, Menlo, Consolas, monospace">
+    <g font-size="11.5" fill="#94c9a0" aria-hidden="true">
+      <text x="24" y="76">                  .;rrsi;;;;;.</text>
+<text x="24" y="91">               ,;2HS####ShHSGhX:,.</text>
+<text x="24" y="106">            .;i3#999999BB99B999#hs.   .</text>
+<text x="24" y="121">          .;X3G99BBB&amp;&amp;B999BBB&amp;BB#9SX;2X;,</text>
+<text x="24" y="136">       .,:r5SB9999BB9#SSS###BBBB9999SH353.</text>
+<text x="24" y="151">     .sA3AhSBB99BB9Gh5AXXAA23SB&amp;999999S#3si</text>
+<text x="24" y="166">     iGS##9#999B99GhAXXsXssXX3SB#9B99999#G3;</text>
+<text x="24" y="181">     ;GSBBB9999B9S3AsssssssssA3S9BBBBB9999#H:</text>
+<text x="24" y="196">      2S9BB99B9#H32AAXXXXXXXAAA3#BBB9B9999Shr</text>
+<text x="24" y="211">      AS9BB99B#HMh2AsssssrrssA5hh#9999B99G5s,</text>
+<text x="24" y="226">     sS9BBBB9#S#SHMMHM2srs3HHh33HHGBBBB99h;.</text>
+<text x="24" y="241">     ,SBBBBBBSGM3hhHh53AsA52HG55A32MBBBBBh.</text>
+<text x="24" y="256">      AS&amp;&amp;&amp;&amp;BMh53h2h253AsX525225AXA39&amp;BBBh</text>
+<text x="24" y="271">       AB93G9h32AXsXA35AsXAAsrsssXA59#hG9,</text>
+<text x="24" y="286">        :G339h5AXssX235AsX2AXsrrrsA3#22sr</text>
+<text x="24" y="301">         .M5Sh5AXXsX222srsAAAsrrssA3h2h,</text>
+<text x="24" y="316">          rh5h52AAAXA22AXA2AXssssXA522S.</text>
+<text x="24" y="331">       ..,A9SH52A2AAAAAAAXXXXXXXXX2#S#M.</text>
+<text x="24" y="346">       GHG#B&amp;&amp;h52AX5352AAAA22AXXAAHBSi.,</text>
+<text x="24" y="361">       .;;rSB&amp;#h52AAAXssXssXXXXA23BBS3MG;</text>
+<text x="24" y="376">          :MB&amp;#hh322AXXXXssXAAA53M&amp;B##M,</text>
+<text x="24" y="391">          .SB&amp;S33hh32AXsssXA2332AH&amp;9h,</text>
+<text x="24" y="406">       iXhS99BG322253552222552AXAMB9#3i:.</text>
+<text x="24" y="421">   :AM#99H9999#3AXXXAAAssXXXXssX2M9###Sh##5r.</text>
+<text x="24" y="436">2M#999999S9##99h2XssXXAXsXssssXA5G#####rS####</text>
+<text x="24" y="451">999999999G9####S5AXsssXsssssssXAM######Xh####</text>
+<text x="24" y="466">999999#999999###GAXsrssssssssXX3S######3X####</text>
+<text x="24" y="481">9999999999B99####G2XrrrrrrrssXh########S:####</text>
+<text x="24" y="496">999999999999999999#G2rrrrrsAhS##9######Sr####</text>
+    </g>
+    <g font-size="12.5">
+      <text x="24" y="37"><tspan fill="#99efa6">jelsin@jelsin29:~$</tspan><tspan fill="#d8eedc"> whoami</tspan></text><text x="382" y="89"><tspan fill="#99efa6">SYSTEM / JELSIN SANCHEZ</tspan></text><path d="M382 99h535" stroke="#354a39"/><text x="382" y="119"><tspan fill="#99efa6">OS</tspan><tspan fill="#8da996"> ........................ </tspan><tspan fill="#d8eedc">macOS, Windows, Android</tspan></text><text x="382" y="141"><tspan fill="#99efa6">Uptime</tspan><tspan fill="#8da996"> .................... </tspan><tspan fill="#d8eedc">2 years on GitHub</tspan></text><text x="382" y="163"><tspan fill="#99efa6">Host</tspan><tspan fill="#8da996"> ...................... </tspan><tspan fill="#d8eedc">İstanbul Medeniyet University</tspan></text><text x="382" y="185"><tspan fill="#99efa6">Kernel</tspan><tspan fill="#8da996"> .................... </tspan><tspan fill="#d8eedc">Computer Engineering Student</tspan></text><text x="382" y="207"><tspan fill="#99efa6">IDE</tspan><tspan fill="#8da996"> ....................... </tspan><tspan fill="#d8eedc">Neovim</tspan></text><text x="382" y="229"><tspan fill="#99efa6">Languages.Programming</tspan><tspan fill="#8da996"> ..... </tspan><tspan fill="#d8eedc">TypeScript, JavaScript, Python, Java, C/C++</tspan></text><text x="382" y="251"><tspan fill="#99efa6">Languages.Computer</tspan><tspan fill="#8da996"> ........ </tspan><tspan fill="#d8eedc">HTML, CSS, JSON, YAML</tspan></text><text x="382" y="273"><tspan fill="#99efa6">Languages.Real</tspan><tspan fill="#8da996"> ............ </tspan><tspan fill="#d8eedc">Spanish, English, Turkish</tspan></text><text x="382" y="295"><tspan fill="#99efa6">Hobbies.Software</tspan><tspan fill="#8da996"> .......... </tspan><tspan fill="#d8eedc">Web development, AI, quantum computing</tspan></text><text x="382" y="331"><tspan fill="#99efa6">CONTACT</tspan></text><path d="M382 341h535" stroke="#354a39"/><text x="382" y="361"><tspan fill="#99efa6">LinkedIn</tspan><tspan fill="#8da996"> .................. </tspan><tspan fill="#d8eedc">linkedin.com/in/jelsin-sanchez</tspan></text><text x="382" y="383"><tspan fill="#99efa6">Discord</tspan><tspan fill="#8da996"> ................... </tspan><tspan fill="#d8eedc">discord.gg/latinoperodecente</tspan></text><text x="382" y="405"><tspan fill="#99efa6">Portfolio</tspan><tspan fill="#8da996"> ................. </tspan><tspan fill="#d8eedc">jelsin-portfolio.vercel.app</tspan></text><text x="382" y="441"><tspan fill="#99efa6">GITHUB / PUBLIC ACTIVITY</tspan></text><path d="M382 451h535" stroke="#354a39"/><text x="382" y="471"><tspan fill="#99efa6">Repos</tspan><tspan fill="#8da996"> ..................... </tspan><tspan fill="#d8eedc">54</tspan><tspan fill="#8da996">  /  </tspan><tspan fill="#99efa6">Contributed</tspan><tspan fill="#d8eedc"> 1</tspan><tspan fill="#8da996">  /  </tspan><tspan fill="#99efa6">Stars</tspan><tspan fill="#d8eedc"> 4</tspan></text><text x="382" y="493"><tspan fill="#99efa6">Commits</tspan><tspan fill="#8da996"> ................... </tspan><tspan fill="#d8eedc">489</tspan><tspan fill="#8da996">  /  </tspan><tspan fill="#99efa6">Followers</tspan><tspan fill="#d8eedc"> 9</tspan></text><text x="382" y="515"><tspan fill="#99efa6">Lines of Code</tspan><tspan fill="#8da996"> ............. </tspan><tspan fill="#d8eedc">489,964</tspan><tspan fill="#99efa6">  +2,979,648</tspan><tspan fill="#ff9292">  -2,489,684</tspan></text>
     </g>
   </g>
 </svg>

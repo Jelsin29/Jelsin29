@@ -1,0 +1,73 @@
+name: Profile koi and stats
+
+on:
+  schedule:
+    - cron: "20 0 * * *"
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/profile-display.yml
+      - .github/scripts/render-profile.py
+
+permissions: {}
+
+concurrency:
+  group: profile-display
+
+jobs:
+  render-koi:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - name: Render koi with read-only access
+        uses: yalongwastaken/git-koi@7305e9b1fadee6f43d3b4fa543a25d4cde79856e # v1.0.2
+        with:
+          body: asagi
+      - name: Store rendered GIF
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: profile-koi
+          path: koi/koi.gif
+          if-no-files-found: error
+          retention-days: 1
+
+  publish:
+    needs: render-koi
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: main
+      - name: Download GIF outside the checkout
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: profile-koi
+          path: ${{ runner.temp }}/profile-koi
+      - name: Install GIF
+        run: |
+          gif="$RUNNER_TEMP/profile-koi/koi.gif"
+          test -f "$gif" && test ! -L "$gif"
+          test "$(file -b --mime-type "$gif")" = image/gif
+          test "$(stat -c %s "$gif")" -le 20000000
+          install -D -m 644 "$gif" koi/koi.gif
+      - name: Render public stats
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PROFILE_LOGIN: ${{ github.repository_owner }}
+        run: python3 .github/scripts/render-profile.py
+      - name: Publish profile images
+        run: |
+          git add profile/stats-dark.svg profile/stats-light.svg koi/koi.gif
+          if git diff --cached --quiet; then
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Refresh profile koi and stats"
+          git push
